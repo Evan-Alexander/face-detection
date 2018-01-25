@@ -38,6 +38,12 @@ class App extends Component {
     }
   }
 
+  componentDidMount() {
+    fetch('http://localhost:3000')
+      .then(response => response.json())
+      .then(console.log)
+  }
+
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('inputimage');
@@ -78,6 +84,7 @@ class App extends Component {
   }
 
   render() {
+    const { isSignedIn, imageUrl, route, box } = this.state;
     return (
       <div className="App">
         <Particles
@@ -86,9 +93,9 @@ class App extends Component {
         />
         <Navigation
           onRouteChange={this.onRouteChange}
-          isSignedIn={this.state.isSignedIn}
+          isSignedIn={isSignedIn}
         />
-        { this.state.route === 'home'
+        { route === 'home'
           ?   <div>
                   <Logo />
                   <Rank />
@@ -97,12 +104,12 @@ class App extends Component {
                   onButtonSubmit={this.onButtonSubmit}
                   />
                   <FaceRecognition
-                    imageUrl={this.state.imageUrl}
-                    box={this.state.box}
+                    imageUrl={imageUrl}
+                    box={box}
                   />
                 </div>
             : (
-              this.state.route === 'signin'
+              route === 'signin'
               ? <SignIn onRouteChange={this.onRouteChange}/>
               : <Register onRouteChange={this.onRouteChange}/>
             )
